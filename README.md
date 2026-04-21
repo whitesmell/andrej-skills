@@ -34,8 +34,7 @@ See [`core.md`](./core.md) for the full canonical source.
 | **Cursor** | `.cursor/rules/*.mdc` | Copy `targets/cursor/.cursor/` to your project root |
 | **OpenCode** | `AGENTS.md` | Copy `targets/opencode/AGENTS.md` to your project root |
 | **Antigravity** | `.agent/skills/*/SKILL.md` | Copy `targets/antigravity/.agent/` to your project root |
-
-OpenClaw target is deferred — its instruction format could not be verified at time of writing.
+| **Hermes Agent** | `HERMES.md` | Copy `targets/hermes-agent/HERMES.md` to your project root |
 
 ## Quick Start
 
@@ -58,6 +57,9 @@ cp targets/opencode/AGENTS.md /path/to/your/project/
 
 # Antigravity
 cp -r targets/antigravity/.agent /path/to/your/project/
+
+# Hermes Agent
+cp targets/hermes-agent/HERMES.md /path/to/your/project/
 ```
 
 ### Option 2: Rebuild from source
@@ -84,10 +86,12 @@ Edit `core.md` to customize, then regenerate all targets:
 │   │       └── karpathy-skills.mdc  # Cursor rules
 │   ├── opencode/
 │   │   └── AGENTS.md                # OpenCode instructions
-│   └── antigravity/
-│       └── .agent/skills/
-│           └── karpathy-skills/
-│               └── SKILL.md         # Antigravity skill
+│   ├── antigravity/
+│   │   └── .agent/skills/
+│   │       └── karpathy-skills/
+│   │           └── SKILL.md         # Antigravity skill
+│   └── hermes-agent/
+│       └── HERMES.md                # Hermes Agent instructions
 ├── .claude-plugin/                  # Claude Code marketplace config
 ├── scripts/
 │   └── build.sh                     # Regenerate targets from core.md

@@ -13,6 +13,7 @@
 | **Cursor** | `.cursor/rules/*.mdc` | YAML frontmatter + Markdown | 按 `alwaysApply` 或语义匹配 | 项目级 |
 | **OpenCode** | `AGENTS.md` | Markdown | 启动时自动读取 | 项目级/目录级 |
 | **Antigravity** | `.agent/skills/*/SKILL.md` | YAML frontmatter + Markdown | 语义匹配按需激活 | 项目级/全局 |
+| **Hermes Agent** | `HERMES.md` / `.hermes.md` | Markdown | 启动时自动读取 + 子目录渐进发现 | 项目级 |
 
 ---
 
@@ -204,6 +205,40 @@ Skill 目录还可以包含辅助文件：
 
 ---
 
+## Hermes Agent (Nous Research)
+
+### 指令文件
+
+- **最高优先级**：项目根目录的 `.hermes.md` 或 `HERMES.md`
+- **兼容文件**：`AGENTS.md`、`CLAUDE.md`、`.cursorrules`、`.cursor/rules/*.mdc`
+- **全局身份**：`~/.hermes/SOUL.md`（全局人格配置，独立加载）
+
+### 加载机制
+
+Hermes 使用**优先级系统 + 子目录渐进发现**：
+
+1. **启动时**扫描工作目录，按优先级加载首个匹配文件：
+   `.hermes.md` → `AGENTS.md` → `CLAUDE.md` → `.cursorrules`（只加载第一个匹配）
+2. **会话过程中**，agent 访问子目录时渐进发现该目录的上下文文件并即时注入
+3. `SOUL.md` 独立于项目上下文，始终从 `HERMES_HOME` 加载
+4. 文件加载时经过安全扫描（检测 prompt injection）和截断（上限 20,000 字符）
+
+子目录渐进发现的优势：
+- 不膨胀系统提示词——子目录指令仅在需要时出现
+- 保持 prompt cache 稳定——系统提示词在多轮对话中不变
+
+### 格式要求
+
+纯 Markdown，无 frontmatter 要求。与 `AGENTS.md` 格式完全一致。
+
+### 适配策略
+
+输出 `HERMES.md` 放置在项目根目录即可。Hermes 原生兼容 `AGENTS.md` 和 `CLAUDE.md`，但为了最高优先级加载，推荐使用 `HERMES.md`。
+
+参考：[Hermes Agent 官网](https://hermes-agent.nousresearch.com/docs/)，[GitHub](https://github.com/nousresearch/hermes-agent)
+
+---
+
 ## 各工具对比分析
 
 ### 格式复杂度
@@ -214,6 +249,7 @@ Skill 目录还可以包含辅助文件：
   Codex                 Cursor              (未来可能)
   OpenCode            Claude Skills
   Claude CLAUDE.md    Antigravity
+  Hermes Agent
 ```
 
 ### 兼容性关系
@@ -223,13 +259,21 @@ AGENTS.md ──── Codex（原生）
     │
     ├──── OpenCode（首选，原生支持）
     │
+    ├──── Hermes Agent（兼容，优先级低于 HERMES.md）
+    │
     └──── Antigravity（不支持，需要 .agent/skills/）
+
+HERMES.md ──── Hermes Agent（原生，最高优先级）
 
 CLAUDE.md ──── Claude Code（原生）
     │
-    └──── OpenCode（回退兼容）
+    ├──── OpenCode（回退兼容）
+    │
+    └──── Hermes Agent（兼容，优先级低于 AGENTS.md）
 
 .cursor/rules/*.mdc ──── Cursor（独有格式）
+                            │
+                            └──── Hermes Agent（兼容，最低优先级）
 
 .agent/skills/*/SKILL.md ──── Antigravity（原生）
                                   │
@@ -240,7 +284,7 @@ CLAUDE.md ──── Claude Code（原生）
 
 | 策略 | 适用 Target | 工作量 |
 |------|------------|--------|
-| 直接输出 Markdown | Codex, OpenCode, Claude `CLAUDE.md` | 最低 |
+| 直接输出 Markdown | Codex, OpenCode, Claude `CLAUDE.md`, Hermes Agent | 最低 |
 | 加 YAML frontmatter | Cursor, Claude Skills, Antigravity | 低 |
 | 结构化配置 | 目前无 | — |
 

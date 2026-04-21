@@ -34,8 +34,7 @@ Andrej Karpathy 指出：
 | **Cursor** | `.cursor/rules/*.mdc` | 复制 `targets/cursor/.cursor/` 到项目根目录 |
 | **OpenCode** | `AGENTS.md` | 复制 `targets/opencode/AGENTS.md` 到项目根目录 |
 | **Antigravity** | `.agent/skills/*/SKILL.md` | 复制 `targets/antigravity/.agent/` 到项目根目录 |
-
-OpenClaw 暂未支持 —— 在编写时无法确认其指令格式。
+| **Hermes Agent** | `HERMES.md` | 复制 `targets/hermes-agent/HERMES.md` 到项目根目录 |
 
 ## 快速开始
 
@@ -58,6 +57,9 @@ cp targets/opencode/AGENTS.md /path/to/your/project/
 
 # Antigravity
 cp -r targets/antigravity/.agent /path/to/your/project/
+
+# Hermes Agent
+cp targets/hermes-agent/HERMES.md /path/to/your/project/
 ```
 
 ### 方式二：从源文件重建
@@ -84,10 +86,12 @@ cp -r targets/antigravity/.agent /path/to/your/project/
 │   │       └── karpathy-skills.mdc  # Cursor 规则
 │   ├── opencode/
 │   │   └── AGENTS.md                # OpenCode 指令
-│   └── antigravity/
-│       └── .agent/skills/
-│           └── karpathy-skills/
-│               └── SKILL.md         # Antigravity skill
+│   ├── antigravity/
+│   │   └── .agent/skills/
+│   │       └── karpathy-skills/
+│   │           └── SKILL.md         # Antigravity skill
+│   └── hermes-agent/
+│       └── HERMES.md                # Hermes Agent 指令
 ├── .claude-plugin/                  # Claude Code marketplace 配置
 ├── scripts/
 │   └── build.sh                     # 从 core.md 重新生成 targets

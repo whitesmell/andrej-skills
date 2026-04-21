@@ -91,4 +91,12 @@ cat >> "$REPO_ROOT/targets/antigravity/.agent/skills/karpathy-skills/SKILL.md" <
 $CORE_BODY
 EOF
 
+# ─── Hermes Agent: HERMES.md ────────────────────────────────────────
+echo "Building targets/hermes-agent/HERMES.md ..."
+cat > "$REPO_ROOT/targets/hermes-agent/HERMES.md" <<EOF
+# Karpathy Skills
+
+$CORE_BODY
+EOF
+
 echo "Done. All targets rebuilt from core.md."
